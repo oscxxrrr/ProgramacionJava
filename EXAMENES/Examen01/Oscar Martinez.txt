@@ -1,0 +1,194 @@
+//EJERCICIO 3
+import java.util.Scanner;
+
+public class ej03 {
+    public static void main(String[] args){
+        int precioArticulo = 0;
+        int precioRebajas = 0;
+        int porcentaje = 0;
+
+        System.out.println("Introduce el precio del articulo:");
+        precioArticulo = new Scanner(System.in).nextInt();
+        System.out.println("Introduce el precio del articulo ya rebajado:");
+        precioRebajas = new Scanner(System.in).nextInt();
+
+        porcentaje = 100 * precioRebajas / precioArticulo;
+        System.out.println("El porcentaje del articulo rebajado es: " + porcentaje);
+    }
+}
+
+//EJERCICIO 4
+import java.util.Scanner;
+
+public class ej04 {
+    public static void main(String[] args){
+        int radio = 0;
+        double volumen = 0;
+
+        System.out.println("Introdce el radio de la esfera:");
+        radio = new Scanner(System.in).nextInt();
+
+        if(radio <= 0){
+            System.out.println("El radio tiene que ser mayor que 0");
+        }else{
+            volumen = 4/3 * 3.141559 * (radio * radio * radio);
+            System.out.println("El volumen es: " + volumen);
+        }
+
+
+    }
+}
+
+//EJERCICIO 5
+import java.util.Scanner;
+
+public class ej05 {
+    public static void main(String[] args){
+        int alturaPozo = 0;
+        int metrosDiarios = 0;
+        double diasTarda = 0;
+
+        System.out.println("Introduce la altura del pozo:");
+        alturaPozo = new Scanner(System.in).nextInt();
+        System.out.println("Introduce los metros diarios que cae la rana:");
+        metrosDiarios = new Scanner(System.in).nextInt();
+
+        if(metrosDiarios < 0 || metrosDiarios > 3){
+            System.out.println("La rana no puede caer mas de 3 metros al dia");
+        }else {
+            diasTarda = alturaPozo / metrosDiarios;
+            System.out.println("Teniendo en cuenta que la altura del pozo es = " + alturaPozo + " y que la rana cae " + metrosDiarios + " diarios, tardara un total de " + diasTarda + " dias.");
+            if(diasTarda >= 7){
+                System.out.println("La rana moriria ya que tiene que estar 7 o mas dias sobreviviendo.");
+            }
+        }
+    }
+}
+
+//EJERCICIO 6
+import java.util.Scanner;
+
+public class ej06 {
+    public static void main(String[] args){
+        int edad = 0;
+        int antiguedad = 0;
+
+        System.out.println("Introduce tu edad: ");
+        edad = new Scanner(System.in).nextInt();
+        System.out.println("Introduce tu antiguedad del carnet de conducir: ");
+        antiguedad = new Scanner(System.in).nextInt();
+
+
+        if(edad >= 21 && edad < 25 && antiguedad >= 2){
+            System.out.println("Puede alquilar el coche pero tienes un recargo.");
+        } else if (edad >= 25 && antiguedad >= 2) {
+            System.out.println("Puedes alquilar el coche.");
+        } else if (edad < 21 || antiguedad < 2) {
+            System.out.println("No tienes la edad o la antiguedad suficiente");
+        }
+    }
+}
+
+//EJERCICIO7
+import java.util.Scanner;
+
+public class ej07 {
+    public static void main(String[] args){
+        final int GRANADA_JAEN = 90;
+        final int TIEMPO_GRX_JAEN = 63;
+        final int ALMUÑECAR_KM = 79;
+        final int ALMERIA_KM = 156;
+        final int MADRID_KM = 417;
+
+        System.out.println("Elige el destino: \n 1) Almuñecar \n 2) Almeria \n 3) Madrid \n Elige la opcion poniendo 1,2 o 3:");
+        int opcion = new Scanner(System.in).nextInt();
+
+        if(opcion == 1){
+            //Usare una regla de 3:
+            double almuñecar = ALMUÑECAR_KM * 1.0 * TIEMPO_GRX_JAEN / GRANADA_JAEN;
+            double horas = almuñecar / 60;
+            double minutos = almuñecar % 60;
+            horas = (int)horas;
+            minutos = (int)minutos;
+            String destino = "Almuñecar";
+            System.out.println("El coche tardara " + horas + " hora/s y " + minutos + " en llegar a " + destino);
+
+
+        } else if (opcion == 2) {
+            double almeria = ALMERIA_KM * 1.0 * TIEMPO_GRX_JAEN / GRANADA_JAEN;
+            double horas = almeria / 60;
+            double minutos = almeria % 60;
+            horas = (int)horas;
+            minutos = (int)minutos;
+            String destino = "Almeria";
+            System.out.println("El coche tardara " + horas + " hora/s y " + minutos + " en llegar a " + destino);
+
+        }else if (opcion == 3) {
+            double madrid = MADRID_KM * 1.0 * TIEMPO_GRX_JAEN / GRANADA_JAEN;
+            double horas = madrid / 60;
+            double minutos = madrid % 60;
+            horas = (int)horas;
+            minutos = (int)minutos;
+            String destino = "Madrid";
+            System.out.println("El coche tardara " + horas + " hora/s y " + minutos + " en llegar a " + destino);
+
+        }
+        //Uso el 60 porque son los minutos que contiene 1h.
+    }
+}
+
+//EJERCICIO 8
+import java.util.Scanner;
+
+public class ej08 {
+    public static void main(String[] args){
+
+        System.out.println("Introduce el primer numero:");
+        double a = new Scanner(System.in).nextInt();
+        System.out.println("Introduce el primer numero:");
+        double b = new Scanner(System.in).nextInt();
+
+        double division = a / b;
+
+        if(b == 0){
+            System.out.println("No se puede dividir entre 0");
+        } else if ( b != 0) {
+            System.out.println("¿Quieres sacar decimales? (1 = si, 2 = no)");
+            int opcion = new Scanner(System.in).nextInt();
+
+            if(opcion == 1){
+                System.out.println("El resultado enseñando decimales es: " + division);
+            } else if (opcion == 2) {
+                double cociente = a / b;
+                double resto = a % b;
+                cociente = (int)cociente;
+                resto = (int)resto;
+                System.out.println("El cociente es: " + cociente +"\n El resto es: " + resto);
+            }else {
+                System.out.println("opcion incorrecta");
+            }
+        }
+        System.out.println("\nFin del programa");
+    }
+}
+
+//EJERCICIO 9
+import java.util.Scanner;
+
+public class ej09 {
+    public static void main(String[] args){
+        System.out.println("Introduce tu numero: ");
+        double num = new Scanner(System.in).nextInt();
+
+        double dig1 = num / 1000;
+        double dig2 = (num / 100);
+        double dig3 = num / 10;
+        double dig4 = num % 10;
+        dig1 = (int)dig1;
+        System.out.println(dig1);
+        System.out.println(dig2);
+        System.out.println(dig3);
+        System.out.println(dig4);
+        
+    }
+}

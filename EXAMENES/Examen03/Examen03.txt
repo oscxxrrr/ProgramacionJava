@@ -1,0 +1,178 @@
+//EXAMEN 03
+
+//Ejercicio 1
+import bpc.daw.consola.CapaCanvas;
+import bpc.daw.consola.CapaTexto;
+import bpc.daw.consola.Consola;
+import bpc.daw.consola.Teclado;
+import com.jd.diana.Dardo;
+import com.jd.diana.Diana;
+import com.jd.diana.ResultadoDisparo;
+
+import java.awt.*;
+
+public class Ej01 {
+    public static void main(String[] args) {
+        int cont = 0;
+        Consola consola = new Consola();
+        CapaCanvas capaCanvas = consola.getCapaCanvas();
+        CapaTexto texto = consola.getCapaTexto();
+        Teclado teclado = consola.getTeclado();
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Dimension dimension = toolkit.getScreenSize();
+        Graphics graphics = capaCanvas.getGraphics();
+        int alto = dimension.height;
+        int ancho = dimension.width;
+        int puntos = 0;
+        boolean dejarDisparar = true;
+        boolean repetir = true;
+         while (repetir){
+             texto.cls();
+             texto.printct(15,"Introuce un numero de disparos par y mayor de 4: ");
+             int disparos = teclado.leerNumeroEntero();
+
+             if (disparos%2==0 && disparos >= 4){
+                 texto.cls();
+                 Diana diana = new Diana(ancho/2,alto/2,500);
+                 diana.dibujar(graphics.create(120,30,1500,1500));
+                 for (int i = 1; i <= disparos && dejarDisparar; i++) {
+                     if (i <= disparos/2){
+                         Dardo dardo = new Dardo(15,Color.RED);
+                         ResultadoDisparo resultado = diana.disparar(dardo);
+                         diana.dibujar(graphics.create(120,30,1500,1500));
+                         double distancia = resultado.getDistancia();
+                         if (distancia == 0){
+                             puntos = puntos + 1000;
+                         } else if (distancia >= 1 && distancia <= 100) {
+                             puntos = puntos + 500;
+                         } else if (distancia >= 101 && distancia <= 300) {
+                             puntos = puntos + 200;
+                         }else if (distancia >= 301 && distancia <= 400) {
+                             puntos = puntos + 100;
+                         } else if (resultado.getColor() == dardo.getColor()) {
+                             puntos = puntos + 400;
+                         }
+                         if (!resultado.estaDentro()){
+                            cont++;
+                         }
+                     }else {
+                         Dardo dardo = new Dardo(15,Color.WHITE);
+                         ResultadoDisparo resultado = diana.disparar(dardo);
+                         diana.dibujar(graphics.create(120,30,1500,1500));
+                         double distancia = resultado.getDistancia();
+                         if (distancia == 0){
+                             puntos = puntos + 1000;
+                         } else if (distancia >= 1 && distancia <= 100) {
+                             puntos = puntos + 500;
+                         } else if (distancia >= 101 && distancia <= 300) {
+                             puntos = puntos + 200;
+                         }else if (distancia >= 301 && distancia <= 400) {
+                             puntos = puntos + 100;
+                         } else if (resultado.getColor() == dardo.getColor()) {
+                             puntos = puntos + 400;
+                         }
+                         if (!resultado.estaDentro()){
+                             cont++;
+                         }
+
+                         if (i == 4){
+                             if (puntos < 500 || cont>=4){
+                                dejarDisparar = false;
+                                repetir = false;
+                                texto.println("Eres muy malo");
+                             }
+                         }
+                     }
+
+                     try {
+                         Thread.sleep(1000);
+                     } catch (InterruptedException e) {
+                         System.out.println(e.getMessage());
+                     }
+                 }
+                 texto.cls();
+                 texto.print(2,10,"Tu puntuacion total es de: " + puntos);
+                 repetir = false;
+             }
+        }
+         teclado.leerCaracter();
+    }
+}
+
+
+//Ejercicio 2
+import java.io.*;
+
+public class Ej02 {
+    public static void main(String[] args) {
+        int correctas = 800;
+        try {
+            File file = new File("matriculas.txt");
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            PrintWriter printWriter = new PrintWriter("matriculasCorregidas.txt");
+
+            for (int i = 0; i < 800; i++) { //Le cada linea del arcihvo matriculas 800 guardadas
+                String linea = bufferedReader.readLine();
+                boolean vocalQ = true;
+
+                for (int j = 0; j < linea.length() && vocalQ; j++) { //Cada linea del arcihvo, hace otro bucle de 0 a la longitud de la linea
+                    char caracter = linea.charAt(j);
+                    if (caracter == 'A' || caracter == 'E' || caracter == 'I' || caracter == 'O' || caracter == 'U' || caracter == 'Q') {
+                        vocalQ = false;
+                    }
+                }
+
+                if (vocalQ) {
+                    printWriter.println(linea);
+                    correctas--;
+                }
+            }
+            printWriter.close();
+            bufferedReader.close();
+            System.out.println("Se han escrito " + correctas + " matriculas correctas.");
+
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+
+
+//Ejercicio 3
+import bpc.daw.consola.CapaCanvas;
+import bpc.daw.consola.Consola;
+import bpc.daw.consola.Teclado;
+
+import java.awt.*;
+import java.util.Random;
+
+public class Ej03 {
+    public static void main(String[] args) {
+        final int ALTURA = 100;
+        Consola consola = new Consola();
+        CapaCanvas capaCanvas = consola.getCapaCanvas();
+        Graphics graphics = capaCanvas.getGraphics();
+        Teclado teclado = consola.getTeclado();
+
+        int anchuraPrimero = new Random().nextInt(10, 801);
+
+        for (int i = 0; i < 10; i++) {
+            int anchura;
+            if (i == 0) {
+                anchura = anchuraPrimero;
+            } else {
+                anchura = new Random().nextInt(10, anchuraPrimero + 1);
+                anchuraPrimero = anchura;
+            }
+            int r = new Random().nextInt(256);
+            int g = new Random().nextInt(256);
+            int b = new Random().nextInt(256);
+
+            graphics.setColor(new Color(r, g, b));
+            graphics.fillRect(0, i * ALTURA, anchura, ALTURA);
+        }
+        teclado.setVisible(false);
+        teclado.leerCaracter();
+    }
+}

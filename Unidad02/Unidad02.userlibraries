@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="MarioLib">
+    <archive path="D:/GRADO SUPERIOR/Programacion/librerias/librerías tema 2/librerías tema 2/Principiante/Mario Bros/MarioLib.jar" />
+  </library>
+  <library name="ObjetosSencillos">
+    <archive path="D:/GRADO SUPERIOR/Programacion/librerias/librerías tema 2/librerías tema 2/Principiante/Objetos Sencillos/ObjetosSencillos.jar" />
+  </library>
+  <library name="swing-layout-1.0.4">
+    <archive path="D:/GRADO SUPERIOR/Programacion/librerias/librerías tema 2/librerías tema 2/Principiante/Mario Bros/swing-layout-1.0.4.jar" />
+  </library>
+  <library name="AscensorLib">
+    <archive path="D:/GRADO SUPERIOR/Programacion/librerias/librerías tema 2/librerías tema 2/Principiante/Ascensor/AscensorLib.jar" />
+  </library>
+  <library name="MusicaLib">
+    <archive path="D:/GRADO SUPERIOR/Programacion/librerias/librerías tema 2/librerías tema 2/Principiante/Musica/MusicaLib.jar" />
+  </library>
+  <library name="ReproductorMusica">
+    <archive path="D:/GRADO SUPERIOR/Programacion/librerias/librerías tema 2/librerías tema 2/Principiante/Reproductor MP3/ReproductorMusica.jar" />
+  </library>
+  <library name="ConsolaDAW">
+    <archive path="D:/GRADO SUPERIOR/Programacion/Unidad02/ConsolaDAW.jar" />
+  </library>
+  <library name="EfectoImagenes">
+    <archive path="D:/GRADO SUPERIOR/Programacion/librerias/librerías tema 2/librerías tema 2/Principiante/dist/EfectoImagenes.jar" />
+  </library>
+  <library name="RestauranteLib">
+    <archive path="C:/Users/Admin/Downloads/RestauranteLib.jar" />
+  </library>
+</eclipse-userlibraries>
+

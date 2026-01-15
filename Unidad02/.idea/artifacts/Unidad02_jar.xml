@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Unidad02:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Unidad02_jar</output-path>
+    <root id="archive" name="Unidad02.jar">
+      <element id="module-output" name="Unidad02" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/ConsolaDAW.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../librerias/librerías tema 2/librerías tema 2/Principiante/Objetos Sencillos/ObjetosSencillos.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../librerias/librerías tema 2/librerías tema 2/Principiante/Mario Bros/MarioLib.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../librerias/librerías tema 2/librerías tema 2/Principiante/dist/EfectoImagenes.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../librerias/librerías tema 2/librerías tema 2/Principiante/Musica/MusicaLib.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../librerias/librerías tema 2/librerías tema 2/Principiante/Mario Bros/swing-layout-1.0.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/RestauranteLib.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../librerias/librerías tema 2/librerías tema 2/Principiante/Ascensor/AscensorLib.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../librerias/librerías tema 2/librerías tema 2/Principiante/Reproductor MP3/ReproductorMusica.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

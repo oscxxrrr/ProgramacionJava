@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inherit-compiler-output="true" inheritJdk="true">
+	<output-test url="file://$MODULE_DIR$/out/test/Unidad02"/>
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<levels>
+		<level name="MarioLib" value="project"/>
+		<level name="swing-layout-1.0.4" value="project"/>
+		<level name="ObjetosSencillos" value="project"/>
+		<level name="javadoc" value="project"/>
+		<level name="AscensorLib" value="project"/>
+		<level name="MusicaLib" value="project"/>
+		<level name="ReproductorMusica" value="project"/>
+		<level name="ConsolaDAW" value="project"/>
+		<level name="EfectoImagenes" value="project"/>
+		<level name="RestauranteLib" value="project"/>
+	</levels>
+</component>

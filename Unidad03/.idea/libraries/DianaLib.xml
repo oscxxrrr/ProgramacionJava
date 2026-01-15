@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="DianaLib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../DianaLib.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
