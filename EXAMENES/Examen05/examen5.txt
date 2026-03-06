@@ -1,0 +1,397 @@
+public enum Estado {
+    ENCENDIDA_OK, ENCENDIDA_AVERIADA, APAGADA;
+    public boolean estaEncendido(){
+        boolean respuesta = false;
+        if (ordinal() == 0){
+            respuesta = true;
+        }
+        return respuesta;
+    }
+}
+
+import bpc.daw.consola.CapaCanvas;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Random;
+
+public interface Camara {
+    public static final int ANCHO_CAMARA = 400;
+    public static final int ALTO_CAMARA = 256;
+
+    public abstract void encender();
+    public abstract void apagar();
+    public abstract void reparar();
+    public abstract Estado getEstado();
+    public abstract String getObjetivo();
+    public abstract BufferedImage getImagenEncendida(LocalDateTime momento);
+    public default BufferedImage getImagenApagada(){
+        return Camara.getImagenNegra(Camara.ANCHO_CAMARA,Camara.ALTO_CAMARA);
+    }
+
+    public default BufferedImage getImagenAveriada(){
+        BufferedImage bf = this.getImagenApagada();
+        Graphics graphics = bf.getGraphics();
+        int random = new Random().nextInt(1,6);
+        for (int i = 0; i < random; i++) {
+            graphics.setColor(Color.GRAY);
+            graphics.fillRect(0, new Random().nextInt(Camara.ALTO_CAMARA), Camara.ANCHO_CAMARA, 30);
+            graphics.drawImage(bf, 0,0,Camara.ANCHO_CAMARA,Camara.ALTO_CAMARA, null);
+        }
+        return bf;
+    }
+
+    public default BufferedImage getImagen(LocalDateTime momento){
+        BufferedImage bf;
+        if (this.getEstado().estaEncendido()){
+            bf = this.getImagenEncendida(momento);
+            Graphics graphics = bf.getGraphics();
+        }else {
+            bf = this.getImagenApagada();
+        }
+        return bf;
+    }
+
+    public default boolean estaEncendida(){
+        return this.getEstado().estaEncendido();
+    }
+
+    public static BufferedImage getImagenNegra(int ancho, int alto){
+        BufferedImage bf = new BufferedImage(ancho, alto, BufferedImage.TYPE_INT_ARGB);
+        Graphics graphics = bf.getGraphics();
+        graphics.setColor(Color.BLACK);
+        graphics.fillRect(0,0,ancho,alto);
+        graphics.drawImage(bf, 0,0,ancho,alto, null);
+        return bf;
+    }
+}
+
+import jd.personajes.lib.Habitacion;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+public record CintaVideo(LocalDateTime inicio, Duration duracion, Habitacion[] habitaciones) {
+    public CintaVideo{
+        if (inicio.isAfter(LocalDateTime.now())){
+            throw new IllegalArgumentException("No puedes poner una fecha posterior a la actual");
+        }
+        if (habitaciones == null || habitaciones.length > 6){
+            throw new IllegalArgumentException("El numero de habitaciones es incorrecto");
+        }
+    }
+}
+
+import jd.personajes.lib.Habitacion;
+import jd.personajes.lib.Personajes;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.time.LocalDateTime;
+import java.util.Random;
+
+public class CamaraHabitacion implements Camara{
+    private  boolean encendido;
+    private boolean averiado;
+    private Habitacion habitacion;
+
+    public CamaraHabitacion(Habitacion h){
+        this.habitacion = h;
+        this.encendido = false;
+        int rand = new Random().nextInt(1,11);
+        if (rand>7){
+            this.averiado = true;
+        }else {
+            this.averiado = false;
+        }
+    }
+
+    public CamaraHabitacion(Habitacion h, boolean e, boolean a){
+        this.habitacion = h;
+        this.encendido = e;
+        this.averiado = a;
+    }
+
+    @Override
+    public void encender() {
+        this.encendido = true;
+    }
+
+    @Override
+    public void apagar() {
+        this.encendido = false;
+    }
+
+    @Override
+    public void reparar() {
+        if (averiado){
+            this.averiado = false;
+        }
+    }
+
+    @Override
+    public Estado getEstado() {
+        return Estado.ENCENDIDA_OK;
+    }
+
+    @Override
+    public String getObjetivo() {
+        return this.habitacion.getNombre().name();
+    }
+
+    @Override
+    public BufferedImage getImagenEncendida(LocalDateTime momento) {
+        BufferedImage bf = Camara.getImagenNegra(400,256);
+        Graphics graphics = bf.getGraphics();
+        graphics.drawImage(this.habitacion.getImagen(), 0,0,null);
+
+        return bf;
+    }
+}
+
+import jd.personajes.lib.Habitacion;
+
+import java.awt.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+public class EquipoVigilancia {
+    public static final int LIMITE_CAMARAS = 6;
+    private Graphics graphics;
+    private List<Camara> camaras;
+
+    public EquipoVigilancia(Graphics g){
+        this.graphics = g;
+        this.camaras = new ArrayList<>();
+    }
+
+    public boolean añadirCamaraHabitacion(Habitacion h){
+        boolean resultado;
+        CamaraHabitacion cam = new CamaraHabitacion(h);
+        if (this.camaras.contains(cam)){
+            resultado = false;
+        }else {
+            resultado = true;
+            this.camaras.add(new CamaraHabitacion(h));
+        }
+        return resultado;
+    }
+
+    public void encender(){
+        for (int i = 0; i < this.camaras.size(); i++) {
+            this.camaras.get(i).encender();
+        }
+    }
+    public void apagar(){
+        for (int i = 0; i < this.camaras.size(); i++) {
+            this.camaras.get(i).apagar();
+        }
+    }
+
+    public boolean estaEncendido(){
+        boolean resultado = false;
+        boolean seguir = true;
+        for (int i = 0; i < this.camaras.size() && seguir; i++) {
+            if (this.camaras.get(i).estaEncendida()){
+                resultado = true;
+                seguir = false;
+            }
+        }
+        return resultado;
+    }
+
+    public int getNumeroCamarasAveriadas(){
+        int cont = 0;
+        for (int i = 0; i < this.camaras.size(); i++) {
+            if (this.camaras.get(i).getEstado().ordinal() == 1){
+                cont++;
+            }
+        }
+        return cont;
+    }
+
+    public int repararCamarasAveriadas(){
+        int cont = 0;
+        if (this.getNumeroCamarasAveriadas() == 0){
+            throw new IllegalArgumentException("No hay camaras averiadas");
+        }
+        for (int i = 0; i < this.camaras.size(); i++) {
+            if (this.camaras.get(i).getEstado().ordinal() == 1){
+                this.camaras.get(i).reparar();
+                cont++;
+            }
+        }
+        return cont;
+    }
+}
+
+import jd.personajes.lib.Habitacion;
+import jd.personajes.lib.Mansion;
+import jd.personajes.lib.Persona;
+import jd.personajes.lib.Posicion;
+
+import java.awt.image.BufferedImage;
+import java.time.LocalDateTime;
+
+public class CamaraSeguimiento implements Camara{
+    private Estado estado;
+    private Persona persona;
+    public CamaraSeguimiento(Persona p){
+        this.persona = p;
+        this.estado = Estado.APAGADA;
+    }
+
+
+    @Override
+    public void encender() {
+        this.estado = Estado.ENCENDIDA_OK;
+    }
+
+    @Override
+    public void apagar() {
+        this.estado = Estado.APAGADA;
+    }
+
+    @Override
+    public void reparar() {
+        this.reparar();
+    }
+
+    @Override
+    public Estado getEstado() {
+        return this.estado;
+    }
+
+    @Override
+    public String getObjetivo() {
+        return this.persona.getNombre().name();
+    }
+
+    @Override
+    public BufferedImage getImagenEncendida(LocalDateTime momento) {
+        Habitacion hab = persona.getPosicion(momento).getHabitacion();
+        CamaraHabitacion cam = new CamaraHabitacion(hab, true, false);
+        return cam.getImagen(momento);
+    }
+}
+
+import jd.personajes.lib.Habitacion;
+import jd.personajes.lib.Mansion;
+import jd.personajes.lib.NombreHabitacion;
+import org.junit.Test;
+
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Locale;
+
+import static org.junit.Assert.*;
+
+public class CintaVideoTest {
+    @Test ( expected = java.lang.IllegalArgumentException.class)
+    public void test01()throws IllegalArgumentException{
+        Mansion mansion = new Mansion();
+        Habitacion hab1 = Mansion.getHabitacion(NombreHabitacion.BIBLIOTECA);
+        Habitacion[] habitaciones = new Habitacion[1];
+        habitaciones[0] = hab1;
+        LocalDateTime inicio = LocalDateTime.of(2026,6,1,20,15,10);
+        CintaVideo cintaVideo = new CintaVideo(inicio, Duration.ofMinutes(2), habitaciones);
+        fail("No deberia de saltar este mensaje");
+    }
+
+}
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class EstadoTest {
+    @Test
+    public void test01(){
+        assertEquals(Estado.ENCENDIDA_OK.estaEncendido(), true);
+    }
+}
+import bpc.daw.consola.CapaCanvas;
+import bpc.daw.consola.Consola;
+import bpc.daw.consola.Teclado;
+import jd.personajes.lib.Habitacion;
+import jd.personajes.lib.Mansion;
+import jd.personajes.lib.NombreHabitacion;
+
+import java.awt.*;
+import java.time.LocalDateTime;
+
+public class Ej4programa {
+    public static void main(String[] args) {
+        Consola consola = new Consola("EXAMEN 5", Camara.ANCHO_CAMARA, Camara.ALTO_CAMARA);
+        Habitacion hab = Mansion.getHabitacion(NombreHabitacion.RECIBIDOR);
+        CamaraHabitacion camaraHabitacion = new CamaraHabitacion(hab, false,false);
+        camaraHabitacion.encender();
+        CapaCanvas capaCanvas = consola.getCapaCanvas();
+        Teclado teclado = consola.getTeclado();
+        Graphics graphics = capaCanvas.getGraphics();
+        graphics.drawImage(camaraHabitacion.getImagenEncendida(LocalDateTime.now()), 0,0,null );
+
+        teclado.setVisible(false);
+        teclado.leerCaracter();
+    }
+}
+import bpc.daw.consola.CapaCanvas;
+import bpc.daw.consola.Consola;
+import bpc.daw.consola.Teclado;
+import jd.personajes.lib.Habitacion;
+import jd.personajes.lib.Mansion;
+import jd.personajes.lib.NombreHabitacion;
+
+import java.awt.*;
+import java.time.LocalDateTime;
+
+public class Ej4_1programa {
+    public static void main(String[] args) {
+        Consola consola = new Consola("EXAMEN 5", Camara.ANCHO_CAMARA, Camara.ALTO_CAMARA);
+        Habitacion hab = Mansion.getHabitacion(NombreHabitacion.COCINA);
+        CamaraHabitacion camaraHabitacion = new CamaraHabitacion(hab, false,true);
+        camaraHabitacion.encender();
+        CapaCanvas capaCanvas = consola.getCapaCanvas();
+        Teclado teclado = consola.getTeclado();
+        Graphics graphics = capaCanvas.getGraphics();
+        graphics.drawImage(camaraHabitacion.getImagenAveriada(), 0,0,null );
+
+
+
+
+        teclado.setVisible(false);
+        teclado.leerCaracter();
+    }
+}
+import bpc.daw.consola.CapaCanvas;
+import bpc.daw.consola.Consola;
+import bpc.daw.consola.Teclado;
+import jd.personajes.lib.Mansion;
+import jd.personajes.lib.NombrePersonaje;
+import jd.personajes.lib.Persona;
+import jd.personajes.lib.Personajes;
+
+import java.awt.*;
+import java.time.LocalDateTime;
+
+public class Ej6programa {
+    public static void main(String[] args) {
+        Persona persona = Personajes.getPersona(NombrePersonaje.MAX);
+        CamaraSeguimiento camaraSeguimiento = new CamaraSeguimiento(persona);
+        camaraSeguimiento.encender();
+
+        Consola consola = new Consola();
+        CapaCanvas capaCanvas = consola.getCapaCanvas();
+        Graphics graphics = capaCanvas.getGraphics();
+        graphics.drawImage(camaraSeguimiento.getImagen(LocalDateTime.now()), 0,0,null);
+        Teclado teclado = consola.getTeclado();
+        teclado.leerCaracter();
+    }
+}
+
+
+
